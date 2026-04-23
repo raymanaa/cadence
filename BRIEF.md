@@ -1,6 +1,6 @@
 # Cadence — Revenue-call intelligence
 
-> Portfolio project #5. Upload a recorded sales call, get timestamped coaching.
+>  Upload a recorded sales call, get timestamped coaching.
 
 ## M0 — Design direction (LOCKED)
 
