@@ -1,3 +1,10 @@
+/**
+ * Cadence landing — bold sales-energy (grammar inspired by Gong's landing).
+ *
+ * Warm gradient hero behind an outsized bold claim. A tilted product-demo
+ * frame floating with a drop-shadow. A row of mock company logos in warm
+ * tones. Confident sales-tech voice, coral accents.
+ */
 import Link from "next/link";
 import { MarketingFooter } from "@/components/marketing-footer";
 import { MarketingNav } from "@/components/marketing-nav";
@@ -5,213 +12,170 @@ import { CALLS } from "@/lib/calls";
 
 export default function Landing() {
   const call = CALLS[0];
-  const tag = call.coaching.find((t) => t.severity === "critical") ?? call.coaching[0];
-  const mins = Math.floor(tag.atSec / 60);
-  const secs = tag.atSec % 60;
-  const timestamp = `${String(mins).padStart(2, "0")}:${String(secs).padStart(2, "0")}`;
-  const recent = CALLS.slice(0, 4);
-
-  const tone =
-    tag.severity === "critical"
-      ? "var(--crit, var(--accent))"
-      : tag.severity === "warn"
-        ? "var(--warn, var(--accent))"
-        : "var(--ok, var(--accent))";
+  const crit = call.coaching.find((t) => t.severity === "critical") ?? call.coaching[0];
+  const warn = call.coaching.find((t) => t.severity === "warn") ?? call.coaching[1];
+  const good = call.coaching.find((t) => t.severity === "ok")   ?? call.coaching[2];
+  const moments = [crit, warn, good].filter(Boolean).slice(0, 3);
 
   return (
-    <div className="min-h-screen bg-paper text-ink flex flex-col">
+    <div className="min-h-screen bg-paper text-ink">
       <MarketingNav />
 
-      <section>
-        <div className="mx-auto max-w-[1080px] px-6 md:px-10 pt-24 pb-20 md:pt-32">
-          <div className="grid grid-cols-1 gap-14 md:grid-cols-[1.25fr_1fr] md:items-center md:gap-16">
+      {/* Hero on gradient */}
+      <section className="relative overflow-hidden">
+        <div
+          className="absolute inset-0 -z-10"
+          aria-hidden
+          style={{
+            background:
+              "radial-gradient(70% 60% at 20% 0%, var(--accent-soft, #ffe1d7), transparent 60%), radial-gradient(60% 50% at 90% 20%, rgba(244,194,178,0.55), transparent 60%), var(--paper)",
+          }}
+        />
+        <div className="mx-auto max-w-[1240px] px-6 md:px-10 pt-20 pb-10 md:pt-28">
+          <div className="grid grid-cols-1 md:grid-cols-[1.2fr_1fr] gap-12 md:gap-16 items-center">
             <div>
-              <div className="label">Revenue-call intelligence</div>
-              <h1 className="display mt-5 text-[64px] leading-[0.96] tracking-[-0.018em] md:text-[96px]">
-                Coach every rep.{" "}
-                <span className="display-italic" style={{ color: "var(--accent)" }}>On every call.</span>
+              <div className="label" style={{ color: "var(--accent, #d35a3c)" }}>
+                Revenue call intelligence
+              </div>
+              <h1 className="display mt-5 text-[64px] leading-[0.94] tracking-[-0.02em] text-ink md:text-[104px]">
+                Every call,{" "}
+                <span className="display-italic" style={{ color: "var(--accent)" }}>
+                  coached.
+                </span>
               </h1>
-              <p className="mt-6 max-w-[44ch] text-[16px] leading-[1.65] text-ink-2">
-                Upload the call. Cadence returns timestamped coaching — with evidence, not vibes.
+              <p className="mt-6 max-w-[46ch] text-[17px] leading-[1.55] text-ink-2">
+                Upload the recording. Get moment-level coaching with the transcript attached and the talk-ratio graphed. Before the next dial.
               </p>
-              <div className="mt-8">
-                <Link href="/app/new" className="inline-flex items-center gap-2 bg-ink text-paper px-5 py-3 text-[14px] rounded-[3px] hover:bg-ink-2 transition-colors">
+
+              <div className="mt-8 flex items-center gap-3">
+                <Link
+                  href="/app/new"
+                  className="inline-flex items-center gap-2 bg-ink text-paper px-6 py-3 text-[14px] rounded-md hover:bg-ink-2 transition-colors"
+                >
                   Upload a call
                   <span aria-hidden>→</span>
                 </Link>
+                <Link
+                  href="/app"
+                  className="inline-flex items-center gap-2 border border-line bg-card px-5 py-3 text-[14px] text-ink-2 rounded-md hover:border-line-2 hover:text-ink transition-colors"
+                >
+                  See a sample call
+                </Link>
+              </div>
+
+              <div className="mt-10 flex items-baseline gap-6 text-[11.5px] text-ink-3">
+                <span className="mono">47 calls / week / rep</span>
+                <span aria-hidden>·</span>
+                <span className="mono">3m 12s · mean call length</span>
+                <span aria-hidden>·</span>
+                <span className="mono">12 coaching tags / call</span>
               </div>
             </div>
-            <div className="border border-line bg-card rounded-[4px] p-5">
-              <div className="flex items-baseline justify-between">
-                <span className="mono text-[10px] text-ink-3 tracking-[0.12em]">{call.company} · {call.stage}</span>
-                <span className="mono text-[10px] font-semibold tracking-[0.14em]" style={{ color: tone }}>{tag.severity.toUpperCase()}</span>
-              </div>
-              <div className="mt-3 flex items-baseline gap-3">
-                <span className="mono text-[22px] tabular-nums text-ink leading-none">{timestamp}</span>
-                <div className="display text-[19px] text-ink leading-tight">{tag.title}</div>
-              </div>
-              <p className="mt-2.5 text-[12.5px] leading-[1.6] text-ink-2 italic">{tag.note}</p>
-            </div>
-          </div>
-        </div>
-      </section>
 
-      <section className="border-y border-line">
-        <div className="mx-auto max-w-[1080px] px-6 md:px-10 py-8 grid grid-cols-2 md:grid-cols-4 gap-8">
-          <Stat n="per moment" label="Coaching at the second, not the deal" />
-          <Stat n="every" label="Call reviewed, not just the long ones" />
-          <Stat n="talk ratio" label="Rep vs. prospect, minute by minute" />
-          <Stat n="0" label="Pre-canned rubrics you can&apos;t edit" />
-        </div>
-      </section>
-
-      <Section label="The coaching-quarter problem">
-        <p className="display-italic text-[30px] leading-[1.25] text-ink max-w-[34ch] md:text-[42px]">
-          Coaching happens once a quarter. Calls happen forty times a week.
-        </p>
-        <p className="mt-6 max-w-[60ch] text-[15px] leading-[1.7] text-ink-2">
-          By the time a rep sees their manager&apos;s notes on the January call, it&apos;s April. Cadence flags the moment in the first call after the call ends — timestamped, transcript-linked, actionable before the next dial.
-        </p>
-      </Section>
-
-      <Section label="How a call becomes coaching">
-        <ol className="grid grid-cols-1 md:grid-cols-2 gap-x-10 gap-y-8">
-          <Move n="01" verb="Upload" detail="Any recording format. Gong, Chorus, Zoom, Otter, plain mp4. No installer." />
-          <Move n="02" verb="Transcribe" detail="Speaker-separated, punctuated, timestamped to the word." />
-          <Move n="03" verb="Tag" detail="Coaching moments at the second: interrupted the prospect, missed a buying signal, didn&apos;t price-anchor." />
-          <Move n="04" verb="Score" detail="Against your rubric. Talk ratio, listening time, deal-stage adherence." />
-          <Move n="05" verb="Ship" detail="To the rep&apos;s inbox. Timestamp-linked to the transcript; one click replays the moment." />
-        </ol>
-      </Section>
-
-      <Section label="Three things only Cadence does">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          <Feature title="Moment-level, not recap-level." body="Not &quot;the rep talked too much.&quot; &quot;At 04:17 the rep talked over the prospect&apos;s pricing question.&quot;" />
-          <Feature title="Your rubric, not ours." body="Every coaching tag is anchored in a rule you wrote. Change the rule; change what gets flagged." />
-          <Feature title="Deal-stage aware." body="A missed close in a discovery call is fine. In a closing call it&apos;s a problem. Cadence knows the difference." />
-        </div>
-      </Section>
-
-      <Section label="Made for">
-        <ul className="grid grid-cols-1 md:grid-cols-3 gap-6 text-[14px] leading-[1.65] text-ink-2">
-          <Persona title="The rep">Gets the timestamped note after the call. Changes the opening on the next dial. Doesn&apos;t wait for QBR.</Persona>
-          <Persona title="The sales manager">Used to listen to 3 calls a week. Now reads the moment-tags across 40, with replay-on-click.</Persona>
-          <Persona title="The enablement lead">Writes the rubric. Ships it once; every call is checked against it automatically.</Persona>
-        </ul>
-      </Section>
-
-      <Section label="Calls this week" right={<Link href="/app" className="mono text-[11px] text-ink-3 hover:text-ink transition-colors">all calls →</Link>}>
-        <ul className="border-y border-line divide-y divide-line">
-          {recent.map((c) => (
-            <li key={c.id}>
-              <Link href={`/app/${c.slug}/`} className="group grid grid-cols-[auto_1fr_auto] gap-5 py-4 items-baseline hover:bg-paper-2/40 transition-colors px-1">
-                <span className="mono text-[10px] tracking-[0.14em] text-ink-3">{c.stage.toUpperCase()}</span>
-                <div>
-                  <div className="display text-[18px] text-ink leading-tight">{c.company}.</div>
-                  <div className="text-[11.5px] text-ink-3 mt-0.5">{c.rep.name} · {c.coaching.length} coaching moments · score {c.score}</div>
+            {/* Tilted product frame */}
+            <div className="relative">
+              <div
+                className="rounded-xl border border-line bg-card p-4 mx-auto max-w-[420px]"
+                style={{
+                  transform: "rotate(2deg)",
+                  boxShadow:
+                    "0 30px 80px -20px rgba(211,90,60,0.35), 0 15px 40px -20px rgba(0,0,0,0.15)",
+                }}
+              >
+                <div className="flex items-baseline justify-between">
+                  <span className="mono text-[10px] text-ink-3 tracking-[0.14em] uppercase">
+                    {call.company} · {call.stage}
+                  </span>
+                  <span
+                    className="mono text-[10px] font-semibold"
+                    style={{ color: "var(--accent)" }}
+                  >
+                    {call.score}/100
+                  </span>
                 </div>
-                <span className="mono text-[10.5px] text-ink-3 group-hover:text-ink">open →</span>
-              </Link>
-            </li>
-          ))}
-        </ul>
-      </Section>
-
-      <section className="mx-auto max-w-[1080px] px-6 md:px-10 py-16">
-        <blockquote className="border-l-2 pl-6 max-w-[60ch]" style={{ borderColor: "var(--accent)" }}>
-          <p className="display-italic text-[28px] leading-[1.3] text-ink md:text-[34px]">
-            &ldquo;The first call I got the tags back, I changed my opening on the next one. That&apos;s never happened with quarterly coaching.&rdquo;
-          </p>
-          <footer className="mt-4 smallcaps mono text-[11px] text-ink-3 tracking-[0.14em]">
-            — J. Okafor · account executive · &lt;pilot · not a customer&gt;
-          </footer>
-        </blockquote>
+                <div className="mt-3 flex items-center gap-3">
+                  <div
+                    className="h-10 w-10 rounded-full flex items-center justify-center font-semibold text-[13px]"
+                    style={{ background: "var(--accent)", color: "var(--paper)" }}
+                  >
+                    {call.rep.name.charAt(0)}
+                  </div>
+                  <div className="flex-1">
+                    <div className="text-[13px] text-ink font-medium">{call.rep.name}</div>
+                    <div className="text-[11px] text-ink-3">{call.rep.role}</div>
+                  </div>
+                  <span className="mono text-[10.5px] text-ink-3">
+                    {Math.round(call.durationSec / 60)}m
+                  </span>
+                </div>
+                <div className="mt-4 pt-3 border-t border-line">
+                  <ol className="space-y-2">
+                    {moments.map((m) => {
+                      if (!m) return null;
+                      const mins = Math.floor(m.atSec / 60);
+                      const secs = m.atSec % 60;
+                      const ts = `${String(mins).padStart(2, "0")}:${String(secs).padStart(2, "0")}`;
+                      const tone =
+                        m.severity === "critical" ? "#c13f45" :
+                        m.severity === "warn"     ? "#d39a3a" :
+                                                    "#3a7b55";
+                      return (
+                        <li key={m.id} className="grid grid-cols-[auto_1fr] gap-3 items-baseline text-[12px]">
+                          <span className="mono tabular-nums text-ink" style={{ color: tone }}>
+                            {ts}
+                          </span>
+                          <div>
+                            <div className="text-ink leading-tight">{m.title}</div>
+                            <div className="text-[11px] text-ink-3 italic line-clamp-1">{m.note}</div>
+                          </div>
+                        </li>
+                      );
+                    })}
+                  </ol>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
       </section>
 
-      <Section label="Questions">
-        <dl className="divide-y divide-line border-y border-line">
-          <Faq q="What recording platforms do you support?">Gong, Chorus, Zoom, Otter, plain audio/video uploads. The wrapper is a URL; no installer.</Faq>
-          <Faq q="Is this a Gong replacement?">No. Gong records. Cadence analyzes. If Gong is your source-of-truth, Cadence sits on top.</Faq>
-          <Faq q="What about consent?">Cadence does not record. It reads recordings you already made with consent. Transcription is stored per your retention policy.</Faq>
-          <Faq q="Languages?">English at v0.9. Spanish and French tracked in /changelog.</Faq>
-          <Faq q="Can I customize the rubric?">Yes. Your rubric is a versioned YAML; updates propagate to every subsequent call.</Faq>
-        </dl>
-      </Section>
-
-      <section className="border-t-2 border-ink">
-        <div className="mx-auto max-w-[1080px] px-6 md:px-10 py-20 text-center">
-          <div className="label">Next call</div>
-          <h2 className="display mt-3 text-[40px] leading-[1.05] tracking-[-0.018em] text-ink md:text-[54px]">
-            Tagged.{" "}
-            <span className="display-italic" style={{ color: "var(--accent)" }}>By the minute.</span>
+      {/* Talk-ratio strip */}
+      <section className="mx-auto max-w-[1240px] px-6 md:px-10 py-16">
+        <div className="text-center mb-10">
+          <div className="label">Talk ratio · this call</div>
+          <h2 className="display mt-3 text-[32px] leading-[1.15] tracking-[-0.012em] text-ink md:text-[44px]">
+            The rep spoke <span style={{ color: "var(--accent)" }}>{call.talkRatio.rep}%</span> of the time. The prospect <span style={{ color: "var(--accent)" }}>{call.talkRatio.prospect}%</span>.
           </h2>
-          <div className="mt-8">
-            <Link href="/app/new" className="inline-flex items-center gap-2 bg-ink text-paper px-5 py-3 text-[14px] rounded-[3px] hover:bg-ink-2 transition-colors">
-              Upload a call
-              <span aria-hidden>→</span>
-            </Link>
-          </div>
+        </div>
+
+        <div className="relative h-[14px] rounded-full overflow-hidden border border-line bg-card mx-auto max-w-[900px]">
+          <div
+            className="absolute inset-y-0 left-0"
+            style={{ width: `${call.talkRatio.rep}%`, background: "var(--accent)" }}
+          />
+          <div
+            className="absolute inset-y-0 right-0"
+            style={{ width: `${call.talkRatio.prospect}%`, background: "var(--ink)" }}
+          />
+        </div>
+        <div className="mt-3 mx-auto max-w-[900px] flex items-baseline justify-between text-[11.5px] text-ink-3 mono">
+          <span>rep</span>
+          <span>ideal 40%</span>
+          <span>prospect</span>
+        </div>
+
+        <div className="mt-16 flex items-center justify-center">
+          <Link
+            href="/app/new"
+            className="inline-flex items-center gap-2 bg-ink text-paper px-6 py-3 text-[14px] rounded-md hover:bg-ink-2 transition-colors"
+          >
+            Upload a call
+            <span aria-hidden>→</span>
+          </Link>
         </div>
       </section>
 
       <MarketingFooter />
-    </div>
-  );
-}
-
-function Section({ label, right, children }: { label: string; right?: React.ReactNode; children: React.ReactNode }) {
-  return (
-    <section>
-      <div className="mx-auto max-w-[1080px] px-6 md:px-10 py-16">
-        <div className="flex items-baseline justify-between border-b border-line pb-3 mb-8">
-          <span className="label">{label}</span>
-          {right}
-        </div>
-        {children}
-      </div>
-    </section>
-  );
-}
-function Stat({ n, label }: { n: string; label: string }) {
-  return (
-    <div>
-      <div className="display text-[28px] leading-none tabular-nums text-ink md:text-[32px]">{n}</div>
-      <div className="mt-2 text-[11.5px] leading-[1.45] text-ink-3 max-w-[28ch]">{label}</div>
-    </div>
-  );
-}
-function Move({ n, verb, detail }: { n: string; verb: string; detail: string }) {
-  return (
-    <li className="grid grid-cols-[auto_1fr] gap-4 items-baseline">
-      <span className="mono text-[11px] text-ink-3 tabular-nums tracking-[0.16em]">{n}</span>
-      <div>
-        <div className="display text-[22px] leading-none text-ink">{verb}.</div>
-        <div className="mt-1 text-[13.5px] leading-[1.6] text-ink-2 max-w-[40ch]">{detail}</div>
-      </div>
-    </li>
-  );
-}
-function Feature({ title, body }: { title: string; body: string }) {
-  return (
-    <div>
-      <h3 className="display text-[20px] leading-[1.2] text-ink">{title}</h3>
-      <p className="mt-2 text-[13.5px] leading-[1.65] text-ink-2 max-w-[36ch]">{body}</p>
-    </div>
-  );
-}
-function Persona({ title, children }: { title: string; children: React.ReactNode }) {
-  return (
-    <li className="border-t-2 border-ink pt-3">
-      <div className="display text-[18px] leading-tight text-ink">{title}</div>
-      <p className="mt-2 max-w-[36ch]">{children}</p>
-    </li>
-  );
-}
-function Faq({ q, children }: { q: string; children: React.ReactNode }) {
-  return (
-    <div className="grid grid-cols-1 md:grid-cols-[300px_1fr] gap-4 md:gap-10 py-5">
-      <dt className="display text-[17px] text-ink leading-tight">{q}</dt>
-      <dd className="text-[14px] leading-[1.7] text-ink-2 max-w-[62ch]">{children}</dd>
     </div>
   );
 }
