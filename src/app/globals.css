@@ -1,26 +1,124 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  /* Cadence — "Studio light" warm palette (locked M0) */
+  --paper:    #faf8f5;
+  --paper-2:  #f1ede4;
+  --card:     #ffffff;
+
+  --ink:      #181716;
+  --ink-2:    #4a4642;
+  --ink-3:    #85807a;
+  --ink-4:    #bab3a7;
+
+  --line:     #e8e2d5;
+  --line-2:   #d6cfbf;
+
+  --accent:        #e85c3d;
+  --accent-2:      #8f2d1d;
+  --accent-soft:   #fde5de;
+
+  --signal-green:  #2f7a5a;
+  --signal-amber:  #d4891f;
+  --lane-rep:      #5d6b7a;
+  --lane-prospect: #c45d3f;
 }
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --color-paper: var(--paper);
+  --color-paper-2: var(--paper-2);
+  --color-card: var(--card);
+  --color-ink: var(--ink);
+  --color-ink-2: var(--ink-2);
+  --color-ink-3: var(--ink-3);
+  --color-ink-4: var(--ink-4);
+  --color-line: var(--line);
+  --color-line-2: var(--line-2);
+  --color-accent: var(--accent);
+  --color-accent-2: var(--accent-2);
+  --color-accent-soft: var(--accent-soft);
+
+  --font-sans: var(--font-work-sans);
+  --font-serif: var(--font-fraunces);
+  --font-mono: var(--font-plex-mono);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+html, body {
+  background: var(--paper);
+  color: var(--ink);
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-sans), "Work Sans", ui-sans-serif, system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+  letter-spacing: -0.002em;
+  line-height: 1.55;
+}
+
+.display {
+  font-family: var(--font-serif), "Fraunces", Georgia, serif;
+  font-variation-settings: "opsz" 144, "SOFT" 80, "WONK" 0;
+  font-weight: 500;
+  letter-spacing: -0.022em;
+}
+.display-italic {
+  font-family: var(--font-serif), "Fraunces", Georgia, serif;
+  font-variation-settings: "opsz" 144, "SOFT" 100, "WONK" 1;
+  font-weight: 500;
+  font-style: italic;
+  letter-spacing: -0.018em;
+}
+
+.label {
+  font-family: var(--font-sans), "Work Sans", sans-serif;
+  font-size: 10.5px;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+}
+
+.mono {
+  font-family: var(--font-mono), "IBM Plex Mono", ui-monospace, monospace;
+  font-feature-settings: "zero";
+}
+
+::-webkit-scrollbar { width: 10px; height: 10px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb {
+  background: var(--line-2);
+  border-radius: 10px;
+  border: 2px solid var(--paper);
+}
+::-webkit-scrollbar-thumb:hover { background: var(--ink-4); }
+
+::selection {
+  background: var(--accent-soft);
+  color: var(--ink);
+}
+
+.rule        { border: 0; height: 1px; background: var(--line); }
+.rule-thick  { border: 0; height: 2px; background: var(--ink); }
+
+/* Subtle paper texture — a very light noise overlay to avoid flat color. */
+.paper-texture::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image: radial-gradient(rgba(24, 23, 22, 0.035) 1px, transparent 1px);
+  background-size: 4px 4px;
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0.4;
+}
+
+/* Play-head pulse on the landing */
+@keyframes playhead-pulse {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(232, 92, 61, 0.5); }
+  50%      { box-shadow: 0 0 0 6px rgba(232, 92, 61, 0); }
+}
+.playhead {
+  animation: playhead-pulse 1.6s ease-out infinite;
 }
