@@ -24,7 +24,6 @@ export function MarketingFooter() {
           </FooterCol>
           <FooterCol label="Context">
             <span className="text-ink-2">Built by Rayen Manaa</span>
-            <span className="text-ink-2">Portfolio project #5</span>
             <a
               href="https://github.com/raymanaa/cadence"
               target="_blank"

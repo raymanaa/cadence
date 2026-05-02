@@ -1,6 +1,6 @@
 # Cadence — Revenue call intelligence
 
-Portfolio project #5. Upload a sales call, get timestamped coaching. Sold to the rep, not the CRO.
+Upload a sales call, get timestamped coaching. Sold to the rep, not the CRO.
 
 Live: https://cadence.raymnz.com
 
